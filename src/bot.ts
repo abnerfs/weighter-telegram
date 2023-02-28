@@ -56,18 +56,18 @@ bot.onText(/\/historico/g, async (msg, _match) => {
     const weights = await weightDatabase.listWeights(userId);
     const response = weights
         .reverse()
-        .reduce((prev, cur) => {
+        .reduce((prev: Array<Weight & { diff?: string }>, cur: Weight & { diff?: string }) => {
             const last = prev.length && prev[prev.length - 1];
-            const diff = cur.weight - last.weight;
-            if(!isNaN(diff)){
-                if(diff >= 0) {
+            if (last) {
+                const diff = cur.weight - last.weight;
+                if (diff >= 0) {
                     cur.diff = ` (+${diff.toFixed(2)}kg)`;
                 }
                 else {
                     cur.diff = ` (${diff.toFixed(2)}kg)`;
                 }
             }
-            else 
+            else
                 cur.diff = ''
             return [...prev, cur];
         }, [])
