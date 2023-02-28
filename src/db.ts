@@ -34,6 +34,12 @@ const upsertWeight = async (weight: Weight): Promise<void> => {
 const listWeights = (userId: string) =>
     withConnection<Promise<Weight[]>>(async (coll) => await coll.find({ "userId": userId }).sort({ "date": "desc" }).limit(50).toArray());
 
+const firstWeight = (userId: string) =>
+    withConnection<Promise<Weight | undefined>>(async (coll) => await coll.find({ "userId": userId }).sort({ "date": "asc" }).limit(1).toArray().then(x => x[0]));
+
+const lastWeight = (userId: string): Promise<Weight | undefined> =>
+    withConnection<Promise<Weight | undefined>>(async (coll) => await coll.find({ "userId": userId }).sort({ "date": "desc" }).limit(1).toArray().then(x => x[0]));
+
 const latestWeight = (userId: string, date: number): Promise<Weight | undefined> =>
     withConnection((coll: Collection<Weight>) =>
         coll.find({ "userId": userId, "date": { "$lt": date } })
@@ -46,6 +52,8 @@ const latestWeight = (userId: string, date: number): Promise<Weight | undefined>
 export const weightDatabase = {
     upsertWeight,
     listWeights,
-    latestWeight
+    latestWeight,
+    firstWeight,
+    lastWeight
 };
 
