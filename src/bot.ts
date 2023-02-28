@@ -13,7 +13,7 @@ const bot = new TelegramBot(token, { polling: true });
 bot.onText(/\/peso ([\d.,]+)/g, async (msg, match) => {
     if (match) {
         const weight = parseFloat(match[1]);
-        const today = moment(moment('2023-03-01').format('YYYY-MM-DD')).valueOf();
+        const today = moment(moment().format('YYYY-MM-DD')).valueOf();
         if (!isNaN(weight)) {
             const chatId = msg.chat.id;
             const userId = msg.from!.id.toString();
