@@ -36,10 +36,10 @@ bot.onText(/\/peso ([\d.,]+)/g, async (msg, match) => {
                     observation = `você manteve o mesmo peso de ${prevDate}`;
                 }
                 else if (diff > 0) {
-                    observation = `😔 você ganhou ➕${diff}kg desde o dia ${prevDate}`;
+                    observation = `😔 você ganhou +${diff}kg desde o dia ${prevDate}`;
                 }
                 else {
-                    observation = `🎉 você perdeu ➖${Math.abs(diff)}kg desde o dia ${prevDate}`;
+                    observation = `🎉 você perdeu ${diff}kg desde o dia ${prevDate}`;
                 }
                 bot.sendMessage(chatId, `✔️ Peso de ${weight}kg salvo, ${observation}`);
             }
