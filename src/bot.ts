@@ -81,3 +81,19 @@ bot.onText(/\/historico/g, async (msg, _match) => {
         bot.sendMessage(chatId, response);
 });
 
+bot.onText(/\/total/g, async (msg, _match) => {
+    const chatId = msg.chat.id;
+    const userId = msg.from!.id.toString();
+    const firstWeight = await weightDatabase.firstWeight(userId);
+    if (!firstWeight) {
+        return bot.sendMessage(chatId, 'Você ainda não tem nenhum peso cadastrado');
+    }
+
+    const lastWeight = (await weightDatabase.lastWeight(userId))!;
+    if (firstWeight.date == lastWeight.date)
+        return bot.sendMessage(chatId, 'Você só tem um peso cadastrado');
+
+    const diff = lastWeight.weight - firstWeight.weight;
+    return bot.sendMessage(chatId, `Diferença de peso do dia <b>${msToDate(firstWeight.date)}</b> (${firstWeight.weight}kg) até o dia <b>${msToDate(lastWeight.date)}</b> (${lastWeight.weight}kg) ${diff.toFixed(2)}kg`,
+    {parse_mode: 'HTML'});
+});
